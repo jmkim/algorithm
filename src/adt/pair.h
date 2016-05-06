@@ -24,13 +24,13 @@ extern "C"
 typedef ADT_PAIR_KEY_TYPE       adt_pair_key_type;
 typedef ADT_PAIR_VALUE_TYPE     adt_pair_value_type;
 
-struct ___adt_pair
+struct adt_pair_adt_pair
 {
     adt_pair_key_type       first;
     adt_pair_value_type     second;
 };
 
-typedef struct  ___adt_pair     adt_pair;
+typedef struct  adt_pair_adt_pair     adt_pair;
 
 #ifdef __cplusplus
 }

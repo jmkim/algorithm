@@ -12,34 +12,34 @@
 #define  ADT_QUEUE_VALUE_TYPE   adt_pair*
 #include "queue.h"
 
-___type
-___create(const ___compare_func compare)
+adt_tree
+adt_tree_create(const adt_tree_compare_func compare)
 {
-    ___type tree = (___type)malloc(sizeof(___type));
+    adt_tree tree = (adt_tree)malloc(sizeof(adt_tree));
     tree->size_ = 0;
     tree->root_ = NULL;
     tree->compare_ = compare;
 }
 
 void
-___destroy(___type tree)
+adt_tree_destroy(adt_tree tree)
 {
 }
 
-___boolean_type
-___empty(___type tree)
-{ return (___boolean_type)(tree->root_ == NULL); }
+adt_tree_boolean_type
+adt_tree_empty(adt_tree tree)
+{ return (adt_tree_boolean_type)(tree->root_ == NULL); }
 
-___size_type
-___size(___type tree)
-{ return (___size_type)tree->size_; }
+adt_tree_size_type
+adt_tree_size(adt_tree tree)
+{ return (adt_tree_size_type)tree->size_; }
 
-___pair_type
-___find(___type tree, const ___key_type key)
+adt_tree_pair_type
+adt_tree_find(adt_tree tree, const adt_tree_key_type key)
 {
-    if(! ___empty(tree))
+    if(! adt_tree_empty(tree))
     {
-        ___pointer n = tree->root_;
+        adt_tree_pointer n = tree->root_;
         while(n != NULL)
         {
             if(compare_(key, n->element_->first) == 0)
@@ -56,21 +56,21 @@ ___find(___type tree, const ___key_type key)
 }
 
 void
-___insert(___type tree, const ___pair_type pair)
+adt_tree_insert(adt_tree tree, const adt_tree_pair_type pair)
 {
-    ___pointer node = (___pointer)malloc(sizeof(___node_type));
+    adt_tree_pointer node = (adt_tree_pointer)malloc(sizeof(adt_tree_node_type));
     node->element_ = pair;
     node->left_ = NULL;
     node->right_ = NULL;
     node->parent_ = NULL;
 
 
-    if(___empty(tree))
+    if(adt_tree_empty(tree))
         tree->root_ = node;
     else
     {
-        ___pointer n = tree->root_;
-        ___pointer p = NULL;
+        adt_tree_pointer n = tree->root_;
+        adt_tree_pointer p = NULL;
         while(n != NULL)
         {
             p = n;
@@ -92,19 +92,19 @@ ___insert(___type tree, const ___pair_type pair)
 }
 
 void
-___erase(___type tree, const ___key_type key)
+adt_tree_erase(adt_tree tree, const adt_tree_key_type key)
 {
-    if(! ___empty(tree))
+    if(! adt_tree_empty(tree))
     {
-        ___pointer n = tree->root_;
+        adt_tree_pointer n = tree->root_;
         while(n != NULL)
         {
             if(compare_(key, n->element_->first) == 0)
             {
                 if(n->left_ != NULL && n->right_ != NULL)
                 {
-                    ___pointer p = ___node_successor(tree, n);
-                    ___element_swap(n, p);
+                    adt_tree_pointer p = adt_tree_node_successor(tree, n);
+                    adt_tree_element_swap(n, p);
                     n = p;
                 }
 
@@ -141,10 +141,10 @@ ___erase(___type tree, const ___key_type key)
     }
 }
 
-___pointer
-___node_predecessor(___type tree, const ___pointer node)
+adt_tree_pointer
+adt_tree_node_predecessor(adt_tree tree, const adt_tree_pointer node)
 {
-    ___pointer n = node;
+    adt_tree_pointer n = node;
 
     if(n != NULL)
     {
@@ -172,10 +172,10 @@ ___node_predecessor(___type tree, const ___pointer node)
     return n;
 }
 
-___pointer
-___node_successor(___type tree, const ___pointer node)
+adt_tree_pointer
+adt_tree_node_successor(adt_tree tree, const adt_tree_pointer node)
 {
-    ___pointer n = node;
+    adt_tree_pointer n = node;
 
     if(n != NULL)
     {
@@ -204,26 +204,26 @@ ___node_successor(___type tree, const ___pointer node)
 }
 
 void
-___element_swap(___pointer first, ___pointer second)
+adt_tree_element_swap(adt_tree_pointer first, adt_tree_pointer second)
 {
-    ___pair_type temp = first->element_;
+    adt_tree_pair_type temp = first->element_;
     first->element_ = second->element_;
     second->element_ = temp;
 }
 
 void
-___traverse_levelorder(___type tree, void (* do_something)(___pair_type))
+adt_tree_traverse_levelorder(adt_tree tree, void (* do_something)(adt_tree_pair_type))
 {
-    if(! ___empty(tree))
+    if(! adt_tree_empty(tree))
     {
-        ___pointer node = tree->root_;
+        adt_tree_pointer node = tree->root_;
 
         adt_queue queue_pair = adt_queue_create();
         adt_queue_push(queue_pair, node->element_);
 
         while(adt_queue_size(queue_pair) > 0)
         {
-            ___pair_type pair = adt_queue_peek_pop(queue_pair);
+            adt_tree_pair_type pair = adt_queue_peek_pop(queue_pair);
             do_something(pair);
 
             if(node->left_ != NULL) adt_queue_push(queue_pair, node->left_->element_);
@@ -233,52 +233,52 @@ ___traverse_levelorder(___type tree, void (* do_something)(___pair_type))
 }
 
 void
-___traverse_inorder(___type tree, void (* do_something)(___pair_type))
+adt_tree_traverse_inorder(adt_tree tree, void (* do_something)(adt_tree_pair_type))
 {
-    if(! ___empty(tree))
-        ___traverse_inorder_using_node(tree->root_, do_something);
+    if(! adt_tree_empty(tree))
+        adt_tree_traverse_inorder_using_node(tree->root_, do_something);
 }
 
 void
-___traverse_preorder(___type tree, void (* do_something)(___pair_type))
+adt_tree_traverse_preorder(adt_tree tree, void (* do_something)(adt_tree_pair_type))
 {
-    if(! ___empty(tree))
-        ___traverse_preorder_using_node(tree->root_, do_something);
+    if(! adt_tree_empty(tree))
+        adt_tree_traverse_preorder_using_node(tree->root_, do_something);
 }
 
 void
-___traverse_postorder(___type tree, void (* do_something)(___pair_type))
+adt_tree_traverse_postorder(adt_tree tree, void (* do_something)(adt_tree_pair_type))
 {
-    if(! ___empty(tree))
-        ___traverse_postorder_using_node(tree->root_, do_something);
+    if(! adt_tree_empty(tree))
+        adt_tree_traverse_postorder_using_node(tree->root_, do_something);
 }
 
 void
-___traverse_inorder_using_node(___pointer node, void (* do_something)(___pair_type))
+adt_tree_traverse_inorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type))
 {
     if(node == NULL) return;
 
-    ___traverse_preorder_using_node(node->left_, do_something);
+    adt_tree_traverse_preorder_using_node(node->left_, do_something);
     do_something(node->element_);
-    ___traverse_preorder_using_node(node->right_, do_something);
+    adt_tree_traverse_preorder_using_node(node->right_, do_something);
 }
 
 void
-___traverse_preorder_using_node(___pointer node, void (* do_something)(___pair_type))
+adt_tree_traverse_preorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type))
 {
     if(node == NULL) return;
 
     do_something(node->element_);
-    ___traverse_preorder_using_node(node->left_, do_something);
-    ___traverse_preorder_using_node(node->right_, do_something);
+    adt_tree_traverse_preorder_using_node(node->left_, do_something);
+    adt_tree_traverse_preorder_using_node(node->right_, do_something);
 }
 
 void
-___traverse_postorder_using_node(___pointer node, void (* do_something)(___pair_type))
+adt_tree_traverse_postorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type))
 {
     if(node == NULL) return;
 
-    ___traverse_preorder_using_node(node->left_, do_something);
-    ___traverse_preorder_using_node(node->right_, do_something);
+    adt_tree_traverse_preorder_using_node(node->left_, do_something);
+    adt_tree_traverse_preorder_using_node(node->right_, do_something);
     do_something(node->element_);
 }
