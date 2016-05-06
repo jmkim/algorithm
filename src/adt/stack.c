@@ -18,7 +18,18 @@ ___create(void)
 
 void
 ___destroy(___type stack)
-{ free(stack); }
+{
+    ___pointer n = stack->top_;
+    ___pointer p = NULL;
+    while(n != NULL)
+    {
+        p = n->next;
+        free(n);
+        n = p;
+    }
+
+    free(stack);
+}
 
 ___boolean_type
 ___is_empty(___type stack)
