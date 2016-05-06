@@ -32,11 +32,11 @@ ___destroy(___type stack)
 }
 
 ___boolean_type
-___is_empty(___type stack)
+___empty(___type stack)
 { return (___boolean_type)(stack->top_ == NULL); }
 
 ___size_type
-___get_size(___type stack)
+___size(___type stack)
 { return (___size_type)stack->size_; }
 
 ___value_type
@@ -57,7 +57,7 @@ ___push(___type stack, ___value_type element)
 void
 ___pop(___type stack)
 {
-    if(! ___is_empty(stack))
+    if(! ___empty(stack))
     {
         ___pointer node = stack->top_;
         stack->top_ = node->next_;

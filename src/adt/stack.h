@@ -53,10 +53,10 @@ void
 ___destroy(___type stack);
 
 ___boolean_type
-___is_empty(___type stack);
+___empty(___type stack);
 
 ___size_type
-___get_size(___type stack);
+___size(___type stack);
 
 ___value_type
 ___peek(___type stack);
