@@ -30,8 +30,8 @@ typedef int                     ___boolean_type;
 
 struct ___node
 {
-            ___value_type        element;
-    struct  ___node*             next;
+            ___value_type        element_;
+    struct  ___node*             next_;
 };
 
 typedef struct  ___node          ___node_type;
@@ -40,8 +40,8 @@ typedef const   ___node_type*    ___const_pointer;
 
 struct adt_stack
 {
-    ___size_type     size;
-    ___pointer       top;
+    ___size_type     size_;
+    ___pointer       top_;
 };
 
 typedef struct  adt_stack*  ___type;
