@@ -17,10 +17,10 @@ extern "C"
 #define ADT_QUEUE_VALUE_TYPE   void*
 #endif
 
-typedef ADT_QUEUE_VALUE_TYPE    ___value_type;
+typedef ADT_QUEUE_VALUE_TYPE    adt_queue_value_type;
 
-typedef size_t                  ___size_type;
-typedef int                     ___boolean_type;
+typedef size_t                  adt_queue_size_type;
+typedef int                     adt_queue_boolean_type;
 #ifndef FALSE
 #   define FALSE    0
 #endif
@@ -28,48 +28,48 @@ typedef int                     ___boolean_type;
 #   define TRUE     1
 #endif
 
-struct ___node
+struct adt_queue_node
 {
-            ___value_type        element_;
-    struct  ___node*             next_;
+            adt_queue_value_type        element_;
+    struct  adt_queue_node*             next_;
 };
 
-typedef struct  ___node          ___node_type;
-typedef         ___node_type*    ___pointer;
-typedef const   ___node_type*    ___const_pointer;
+typedef struct  adt_queue_node          adt_queue_node_type;
+typedef         adt_queue_node_type*    adt_queue_pointer;
+typedef const   adt_queue_node_type*    adt_queue_const_pointer;
 
-struct adt_queue
+struct adt_queue_adt_queue
 {
-    ___size_type     size_;
-    ___pointer       front_;
-    ___pointer       back_;
+    adt_queue_size_type     size_;
+    adt_queue_pointer       front_;
+    adt_queue_pointer       back_;
 };
 
-typedef struct  adt_queue*  ___type;
+typedef struct  adt_queue_adt_queue*  adt_queue;
 
-___type
-___create(void);
-
-void
-___destroy(___type queue);
-
-___boolean_type
-___empty(___type queue);
-
-___size_type
-___size(___type queue);
-
-___value_type
-___peek(___type queue);
+adt_queue
+adt_queue_create(void);
 
 void
-___push(___type queue, ___value_type element);
+adt_queue_destroy(adt_queue queue);
+
+adt_queue_boolean_type
+adt_queue_empty(adt_queue queue);
+
+adt_queue_size_type
+adt_queue_size(adt_queue queue);
+
+adt_queue_value_type
+adt_queue_peek(adt_queue queue);
 
 void
-___pop(___type queue);
+adt_queue_push(adt_queue queue, adt_queue_value_type element);
 
-___value_type
-___peek_pop(___type queue);
+void
+adt_queue_pop(adt_queue queue);
+
+adt_queue_value_type
+adt_queue_peek_pop(adt_queue queue);
 
 #ifdef __cplusplus
 }

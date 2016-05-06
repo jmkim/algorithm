@@ -8,20 +8,20 @@
 #include <stdlib.h>
 #include "queue.h"
 
-___type
-___create(void)
+adt_queue
+adt_queue_create(void)
 {
-    ___type queue = (___type)malloc(sizeof(___type));
+    adt_queue queue = (adt_queue)malloc(sizeof(adt_queue));
     queue->size_ = 0;
     queue->front_ = NULL;
     queue->back_ = NULL;
 }
 
 void
-___destroy(___type queue)
+adt_queue_destroy(adt_queue queue)
 {
-    ___pointer n = queue->back_;
-    ___pointer p = NULL;
+    adt_queue_pointer n = queue->back_;
+    adt_queue_pointer p = NULL;
     while(n != NULL)
     {
         p = n->next;
@@ -32,25 +32,25 @@ ___destroy(___type queue)
     free(queue);
 }
 
-___boolean_type
-___empty(___type queue)
-{ return (___boolean_type)(queue->front_ == NULL); }
+adt_queue_boolean_type
+adt_queue_empty(adt_queue queue)
+{ return (adt_queue_boolean_type)(queue->front_ == NULL); }
 
-___size_type
-___size(___type queue)
-{ return (___size_type)queue->size_; }
+adt_queue_size_type
+adt_queue_size(adt_queue queue)
+{ return (adt_queue_size_type)queue->size_; }
 
-___value_type
-___peek(___type queue)
+adt_queue_value_type
+adt_queue_peek(adt_queue queue)
 { return queue->back_->element_; }
 
 void
-___push(___type queue, ___value_type element)
+adt_queue_push(adt_queue queue, adt_queue_value_type element)
 {
-    ___pointer node = (___pointer)malloc(sizeof(___node_type));
+    adt_queue_pointer node = (adt_queue_pointer)malloc(sizeof(adt_queue_node_type));
     node->element_ = element;
 
-    if(___empty(queue))
+    if(adt_queue_empty(queue))
         queue->front_ = node;
     else
         queue->back_->next = node;
@@ -59,13 +59,13 @@ ___push(___type queue, ___value_type element)
 }
 
 void
-___pop(___type queue)
+adt_queue_pop(adt_queue queue)
 {
-    if(! ___empty(queue))
+    if(! adt_queue_empty(queue))
     {
-        ___pointer node = queue->front_;
+        adt_queue_pointer node = queue->front_;
         queue->front_ = node->next_;
-        if(___empty(queue))
+        if(adt_queue_empty(queue))
             queue->back_ = NULL;
         --queue->size_;
 
@@ -73,10 +73,10 @@ ___pop(___type queue)
     }
 }
 
-___value_type
-___peek_pop(___type queue)
+adt_queue_value_type
+adt_queue_peek_pop(adt_queue queue)
 {
-    ___value_type value = ___peek(queue);
-    ___pop(queue);
+    adt_queue_value_type value = adt_queue_peek(queue);
+    adt_queue_pop(queue);
     return value;
 }

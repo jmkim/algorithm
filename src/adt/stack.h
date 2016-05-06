@@ -17,10 +17,10 @@ extern "C"
 #define ADT_STACK_VALUE_TYPE   void*
 #endif
 
-typedef ADT_STACK_VALUE_TYPE    ___value_type;
+typedef ADT_STACK_VALUE_TYPE    adt_stack_value_type;
 
-typedef size_t                  ___size_type;
-typedef int                     ___boolean_type;
+typedef size_t                  adt_stack_size_type;
+typedef int                     adt_stack_boolean_type;
 #ifndef FALSE
 #   define FALSE    0
 #endif
@@ -28,47 +28,47 @@ typedef int                     ___boolean_type;
 #   define TRUE     1
 #endif
 
-struct ___node
+struct adt_stack_node
 {
-            ___value_type        element_;
-    struct  ___node*             next_;
+            adt_stack_value_type        element_;
+    struct  adt_stack_node*             next_;
 };
 
-typedef struct  ___node          ___node_type;
-typedef         ___node_type*    ___pointer;
-typedef const   ___node_type*    ___const_pointer;
+typedef struct  adt_stack_node          adt_stack_node_type;
+typedef         adt_stack_node_type*    adt_stack_pointer;
+typedef const   adt_stack_node_type*    adt_stack_const_pointer;
 
-struct adt_stack
+struct adt_stack_adt_stack
 {
-    ___size_type     size_;
-    ___pointer       top_;
+    adt_stack_size_type     size_;
+    adt_stack_pointer       top_;
 };
 
-typedef struct  adt_stack*  ___type;
+typedef struct  adt_stack_adt_stack*  adt_stack;
 
-___type
-___create(void);
-
-void
-___destroy(___type stack);
-
-___boolean_type
-___empty(___type stack);
-
-___size_type
-___size(___type stack);
-
-___value_type
-___peek(___type stack);
+adt_stack
+adt_stack_create(void);
 
 void
-___push(___type stack, ___value_type element);
+adt_stack_destroy(adt_stack stack);
+
+adt_stack_boolean_type
+adt_stack_empty(adt_stack stack);
+
+adt_stack_size_type
+adt_stack_size(adt_stack stack);
+
+adt_stack_value_type
+adt_stack_peek(adt_stack stack);
 
 void
-___pop(___type stack);
+adt_stack_push(adt_stack stack, adt_stack_value_type element);
 
-___value_type
-___peek_pop(___type stack);
+void
+adt_stack_pop(adt_stack stack);
+
+adt_stack_value_type
+adt_stack_peek_pop(adt_stack stack);
 
 #ifdef __cplusplus
 }

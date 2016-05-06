@@ -8,19 +8,19 @@
 #include <stdlib.h>
 #include "stack.h"
 
-___type
-___create(void)
+adt_stack
+adt_stack_create(void)
 {
-    ___type stack = (___type)malloc(sizeof(___type));
+    adt_stack stack = (adt_stack)malloc(sizeof(adt_stack));
     stack->size_ = 0;
     stack->top_ = NULL;
 }
 
 void
-___destroy(___type stack)
+adt_stack_destroy(adt_stack stack)
 {
-    ___pointer n = stack->top_;
-    ___pointer p = NULL;
+    adt_stack_pointer n = stack->top_;
+    adt_stack_pointer p = NULL;
     while(n != NULL)
     {
         p = n->next;
@@ -31,22 +31,22 @@ ___destroy(___type stack)
     free(stack);
 }
 
-___boolean_type
-___empty(___type stack)
-{ return (___boolean_type)(stack->top_ == NULL); }
+adt_stack_boolean_type
+adt_stack_empty(adt_stack stack)
+{ return (adt_stack_boolean_type)(stack->top_ == NULL); }
 
-___size_type
-___size(___type stack)
-{ return (___size_type)stack->size_; }
+adt_stack_size_type
+adt_stack_size(adt_stack stack)
+{ return (adt_stack_size_type)stack->size_; }
 
-___value_type
-___peek(___type stack)
+adt_stack_value_type
+adt_stack_peek(adt_stack stack)
 { return stack->top_->element_; }
 
 void
-___push(___type stack, ___value_type element)
+adt_stack_push(adt_stack stack, adt_stack_value_type element)
 {
-    ___pointer node = (___pointer)malloc(sizeof(___node_type));
+    adt_stack_pointer node = (adt_stack_pointer)malloc(sizeof(adt_stack_node_type));
     node->element_ = element;
 
     node->next_ = stack->top_;
@@ -55,11 +55,11 @@ ___push(___type stack, ___value_type element)
 }
 
 void
-___pop(___type stack)
+adt_stack_pop(adt_stack stack)
 {
-    if(! ___empty(stack))
+    if(! adt_stack_empty(stack))
     {
-        ___pointer node = stack->top_;
+        adt_stack_pointer node = stack->top_;
         stack->top_ = node->next_;
         --stack->size_;
 
@@ -67,10 +67,10 @@ ___pop(___type stack)
     }
 }
 
-___value_type
-___peek_pop(___type stack)
+adt_stack_value_type
+adt_stack_peek_pop(adt_stack stack)
 {
-    ___value_type value = ___peek(stack);
-    ___pop(stack);
+    adt_stack_value_type value = adt_stack_peek(stack);
+    adt_stack_pop(stack);
     return value;
 }
