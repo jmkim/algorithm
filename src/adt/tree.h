@@ -1,8 +1,10 @@
 /**
+ *
  *  ADT: Tree
- *  Implementation
+ *  Declaration
  *
  *  http://github.com/kdzlvaids/algorithm
+ *
  */
 
 #ifndef ALGORITHM_ADT_TREE_H_

@@ -1,8 +1,10 @@
 /**
+ *
  *  ADT: Queue
- *  Implementation
+ *  Declaration
  *
  *  http://github.com/kdzlvaids/algorithm
+ *
  */
 
 #ifndef ALGORITHM_ADT_QUEUE_H_

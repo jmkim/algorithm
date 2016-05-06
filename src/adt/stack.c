@@ -1,8 +1,10 @@
 /**
+ *
  *  ADT: Stack
  *  Definition
  *
  *  http://github.com/kdzlvaids/algorithm
+ *
  */
 
 #include <stdlib.h>

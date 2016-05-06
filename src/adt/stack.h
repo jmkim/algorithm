@@ -1,8 +1,10 @@
 /**
+ *
  *  ADT: Stack
- *  Implementation
+ *  Declaration
  *
  *  http://github.com/kdzlvaids/algorithm
+ *
  */
 
 #ifndef ALGORITHM_ADT_STACK_H_
