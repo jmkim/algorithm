@@ -24,7 +24,7 @@ adt_queue_destroy(adt_queue queue)
     adt_queue_pointer p = NULL;
     while(n != NULL)
     {
-        p = n->next;
+        p = n->next_;
         free(n);
         n = p;
     }
@@ -53,7 +53,7 @@ adt_queue_push(adt_queue queue, adt_queue_value_type element)
     if(adt_queue_empty(queue))
         queue->front_ = node;
     else
-        queue->back_->next = node;
+        queue->back_->next_ = node;
     queue->back_ = node;
     ++queue->size_;
 }

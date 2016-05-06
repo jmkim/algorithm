@@ -23,7 +23,7 @@ adt_stack_destroy(adt_stack stack)
     adt_stack_pointer p = NULL;
     while(n != NULL)
     {
-        p = n->next;
+        p = n->next_;
         free(n);
         n = p;
     }
