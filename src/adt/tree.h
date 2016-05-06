@@ -58,6 +58,9 @@ adt_tree_create(const adt_tree_compare_func compare);
 void
 adt_tree_destroy(adt_tree tree);
 
+void
+adt_tree_postorder_traverse_for_destroy(adt_tree_pointer node);
+
 adt_tree_boolean_type
 adt_tree_empty(adt_tree tree);
 
