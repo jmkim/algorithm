@@ -17,7 +17,7 @@
 adt_tree*
 adt_tree_create(const adt_tree_compare_func compare)
 {
-    adt_tree tree = (adt_tree)malloc(sizeof(struct adt_tree_adt_tree));
+    adt_tree* tree = (adt_tree*)malloc(sizeof(struct adt_tree_adt_tree));
     tree->size_ = 0;
     tree->root_ = NULL;
     tree->compare_ = compare;
@@ -234,12 +234,14 @@ adt_tree_traverse_levelorder(adt_tree* tree, void (* do_something)(adt_tree_pair
     {
         adt_tree_pointer node = tree->root_;
 
-        adt_queue queue_pair = adt_queue_create();
+        adt_queue* queue_pair = adt_queue_create();
         adt_queue_push(queue_pair, node->element_);
 
         while(adt_queue_size(queue_pair) > 0)
         {
-            adt_tree_pair_type pair = adt_queue_peek_pop(queue_pair);
+            adt_tree_pair_type pair = adt_queue_front(queue_pair);
+            adt_queue_pop(queue_pair);
+
             do_something(pair);
 
             if(node->left_ != NULL) adt_queue_push(queue_pair, node->left_->element_);
