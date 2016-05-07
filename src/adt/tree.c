@@ -17,7 +17,7 @@
 adt_tree
 adt_tree_create(const adt_tree_compare_func compare)
 {
-    adt_tree tree = (adt_tree)malloc(sizeof(adt_tree));
+    adt_tree tree = (adt_tree)malloc(sizeof(struct adt_tree_adt_tree));
     tree->size_ = 0;
     tree->root_ = NULL;
     tree->compare_ = compare;
