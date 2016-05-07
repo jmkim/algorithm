@@ -52,52 +52,52 @@ struct adt_tree_adt_tree
     adt_tree_compare_func     compare_;
 };
 
-typedef struct  adt_tree_adt_tree*       adt_tree;
+typedef struct  adt_tree_adt_tree        adt_tree;
 
-adt_tree
+adt_tree*
 adt_tree_create(const adt_tree_compare_func compare);
 
 void
-adt_tree_destroy(adt_tree tree);
+adt_tree_destroy(adt_tree* tree);
 
 void
 adt_tree_postorder_traverse_for_destroy(adt_tree_pointer node);
 
 adt_tree_boolean_type
-adt_tree_empty(adt_tree tree);
+adt_tree_empty(adt_tree* tree);
 
 adt_tree_size_type
-adt_tree_size(adt_tree tree);
+adt_tree_size(adt_tree* tree);
 
 adt_tree_pair_type
-adt_tree_find(adt_tree tree, const adt_tree_key_type key);
+adt_tree_find(adt_tree* tree, const adt_tree_key_type key);
 
 void
-adt_tree_insert(adt_tree tree, const adt_tree_pair_type pair);
+adt_tree_insert(adt_tree* tree, const adt_tree_pair_type pair);
 
 void
-adt_tree_erase(adt_tree tree, const adt_tree_key_type key);
+adt_tree_erase(adt_tree* tree, const adt_tree_key_type key);
 
 void
 adt_tree_element_swap(adt_tree_pointer first, adt_tree_pointer second);
 
 adt_tree_pointer
-adt_tree_node_successor(adt_tree tree, const adt_tree_pointer node);
+adt_tree_node_successor(adt_tree* tree, const adt_tree_pointer node);
 
 adt_tree_pointer
-adt_tree_node_predecessor(adt_tree tree, const adt_tree_pointer node);
+adt_tree_node_predecessor(adt_tree* tree, const adt_tree_pointer node);
 
 void
-adt_tree_traverse_levelorder(adt_tree tree, void (* do_something)(adt_tree_pair_type));
+adt_tree_traverse_levelorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type));
 
 void
-adt_tree_traverse_inorder(adt_tree tree, void (* do_something)(adt_tree_pair_type));
+adt_tree_traverse_inorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type));
 
 void
-adt_tree_traverse_preorder(adt_tree tree, void (* do_something)(adt_tree_pair_type));
+adt_tree_traverse_preorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type));
 
 void
-adt_tree_traverse_postorder(adt_tree tree, void (* do_something)(adt_tree_pair_type));
+adt_tree_traverse_postorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type));
 
 void
 adt_tree_traverse_inorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type));
