@@ -239,7 +239,7 @@ adt_tree_traverse_levelorder(adt_tree* tree, void (* do_something)(adt_tree_pair
 
         while(adt_queue_size(queue_pair) > 0)
         {
-            adt_tree_pair_type pair = adt_queue_front(queue_pair);
+            adt_tree_pair_type pair = (adt_tree_pair_type)adt_queue_front(queue_pair);
             adt_queue_pop(queue_pair);
 
             do_something(pair);
