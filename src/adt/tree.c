@@ -58,10 +58,10 @@ adt_tree_find(adt_tree* tree, const adt_tree_key_type key)
         adt_tree_pointer n = tree->root_;
         while(n != NULL)
         {
-            if(compare_(key, n->element_->first) == 0)
+            if(tree->compare_(key, n->element_->first) == 0)
                 return n->element_;
 
-            if(compare_(key, n->element_->first) < 0)
+            if(tree->compare_(key, n->element_->first) < 0)
                 n = n->left_;
             else
                 n = n->right_;
@@ -91,14 +91,14 @@ adt_tree_insert(adt_tree* tree, const adt_tree_pair_type pair)
         {
             p = n;
 
-            if(compare_(pair->first, n->element_->first) < 0)
+            if(tree->compare_(pair->first, n->element_->first) < 0)
                 n = n->left_;
             else
                 n = n->right_;
         }
 
         node->parent_ = p;
-        if(compare_(pair->first, p->element_->first) < 0)
+        if(tree->compare_(pair->first, p->element_->first) < 0)
             p->left_ = node;
         else
             p->right_ = node;
@@ -115,7 +115,7 @@ adt_tree_erase(adt_tree* tree, const adt_tree_key_type key)
         adt_tree_pointer n = tree->root_;
         while(n != NULL)
         {
-            if(compare_(key, n->element_->first) == 0)
+            if(tree->compare_(key, n->element_->first) == 0)
             {
                 if(n->left_ != NULL && n->right_ != NULL)
                 {
@@ -149,7 +149,7 @@ adt_tree_erase(adt_tree* tree, const adt_tree_key_type key)
                 free(n);
             }
 
-            if(compare_(key, n->element_->first) < 0)
+            if(tree->compare_(key, n->element_->first) < 0)
                 n = n->left_;
             else
                 n = n->right_;
