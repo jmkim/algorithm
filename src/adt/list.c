@@ -118,3 +118,25 @@ adt_list_erase(adt_list* list, const adt_list_pos_type pos)
 
     free(posnode);
 }
+
+void
+adt_list_traverse(adt_list* list, void (* do_something)(adt_list_value_type))
+{
+    adt_list_pointer n = list->front_;
+    while(n != NULL)
+    {
+        do_something(n->element_);
+        n = n->prev_;
+    }
+}
+
+void
+adt_list_traverse_reverse(adt_list* list, void (* do_something)(adt_list_value_type))
+{
+    adt_list_pointer n = list->back_;
+    while(n != NULL)
+    {
+        do_something(n->element_);
+        n = n->next_;
+    }
+}

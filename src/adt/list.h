@@ -77,6 +77,12 @@ adt_list_insert(adt_list* list, const adt_list_pos_type pos, const adt_list_valu
 void
 adt_list_erase(adt_list* list, const adt_list_pos_type pos);
 
+void
+adt_list_traverse(adt_list* list, void (* do_something)(adt_list_value_type));
+
+void
+adt_list_traverse_reverse(adt_list* list, void (* do_something)(adt_list_value_type));
+
 #ifdef __cplusplus
 }
 #endif
