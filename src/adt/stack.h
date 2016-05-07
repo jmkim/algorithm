@@ -31,8 +31,8 @@ typedef int         adt_stack_boolean_type;
 #define adt_stack_create()              adt_list_create()
 #define adt_stack_destroy(stack)        adt_list_destroy(stack)
 
-#define adt_stack_traverse(stack)       adt_list_traverse(stack)
-#define adt_stack_traverse_reverse(stack)       adt_list_traverse_reverse(stack)
+#define adt_stack_traverse(stack, callback)             adt_list_traverse(stack, callback)
+#define adt_stack_traverse_reverse(stack, callback)     adt_list_traverse_reverse(stack, callback)
 
 #ifdef __cplusplus
 }

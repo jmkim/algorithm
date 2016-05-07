@@ -34,8 +34,8 @@ typedef int         adt_queue_boolean_type;
 #define adt_queue_create()              adt_list_create()
 #define adt_queue_destroy(queue)        adt_list_destroy(queue)
 
-#define adt_queue_traverse(queue)       adt_list_traverse(queue)
-#define adt_queue_traverse_reverse(queue)       adt_list_traverse_reverse(queue)
+#define adt_queue_traverse(queue, callback)             adt_list_traverse(queue, callback)
+#define adt_queue_traverse_reverse(queue, callback)     adt_list_traverse_reverse(queue, callback)
 
 #ifdef __cplusplus
 }
