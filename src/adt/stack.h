@@ -17,7 +17,8 @@ extern "C"
 {
 #endif
 
-typedef adt_list                        adt_stack;
+typedef adt_list    adt_stack;
+typedef int         adt_stack_boolean_type;
 
 #define adt_stack_top(stack)            stack->back_->element_
 

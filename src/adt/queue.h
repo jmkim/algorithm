@@ -19,7 +19,8 @@ extern "C"
 {
 #endif
 
-typedef adt_list                        adt_queue;
+typedef adt_list    adt_queue;
+typedef int         adt_queue_boolean_type;
 
 #define adt_queue_front(queue)          queue->front_->element_
 #define adt_queue_back(queue)           queue->back_->element_
