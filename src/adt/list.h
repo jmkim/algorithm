@@ -59,7 +59,7 @@ typedef struct  adt_list_adt_list       adt_list;
 
 #define adt_list_push_front(list, element)  adt_list_insert(list, 0, element)
 #define adt_list_pop_front(list)            adt_list_erase(list, 0)
-#define adt_list_push_back(list, element)   adt_list_insert(list, list->size_ - 1, element)
+#define adt_list_push_back(list, element)   adt_list_insert(list, list->size_, element)
 #define adt_list_pop_back(list)             adt_list_erase(list, list->size_ - 1)
 
 adt_list*
