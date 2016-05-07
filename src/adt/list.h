@@ -49,7 +49,7 @@ struct adt_list_adt_list
     adt_list_pointer        back_;
 };
 
-typedef struct  adt_list_adt_list*      adt_list;
+typedef struct  adt_list_adt_list       adt_list;
 
 #define adt_list_front(list)            list->front_->element_
 #define adt_list_back(list)             list->back_->element_
@@ -62,20 +62,20 @@ typedef struct  adt_list_adt_list*      adt_list;
 #define adt_list_push_back(list, element)   adt_list_insert(list, list->size_ - 1, element)
 #define adt_list_pop_back(list)             adt_list_erase(list, list->size_ - 1)
 
-adt_list
+adt_list*
 adt_list_create(void);
 
 void
-adt_list_destroy(adt_list list);
+adt_list_destroy(adt_list* list);
 
 void
-adt_list_clear(adt_list list);
+adt_list_clear(adt_list* list);
 
 void
-adt_list_insert(adt_list list, const adt_list_pos_type pos, const adt_list_value_type element);
+adt_list_insert(adt_list* list, const adt_list_pos_type pos, const adt_list_value_type element);
 
 void
-adt_list_erase(adt_list list, const adt_list_pos_type pos);
+adt_list_erase(adt_list* list, const adt_list_pos_type pos);
 
 #ifdef __cplusplus
 }

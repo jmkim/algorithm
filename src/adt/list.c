@@ -10,10 +10,10 @@
 #include <stdlib.h>
 #include "list.h"
 
-adt_list
+adt_list*
 adt_list_create(void)
 {
-    adt_list list   = (adt_list)malloc(sizeof(struct adt_list_adt_list));
+    adt_list* list  = (adt_list*)malloc(sizeof(struct adt_list_adt_list));
     list->size_     = 0;
     list->front_    = NULL;
     list->back_     = NULL;
@@ -22,14 +22,14 @@ adt_list_create(void)
 }
 
 void
-adt_list_destroy(adt_list list)
+adt_list_destroy(adt_list* list)
 {
     adt_list_clear(list);
     free(list);
 }
 
 void
-adt_list_clear(adt_list list)
+adt_list_clear(adt_list* list)
 {
     adt_list_pointer n = list->back_;
     adt_list_pointer p = NULL;
@@ -46,7 +46,7 @@ adt_list_clear(adt_list list)
 }
 
 void
-adt_list_insert(adt_list list, const adt_list_pos_type pos, const adt_list_value_type element)
+adt_list_insert(adt_list* list, const adt_list_pos_type pos, const adt_list_value_type element)
 {
     adt_list_pointer posnode = list->front_;
 
@@ -92,7 +92,7 @@ adt_list_insert(adt_list list, const adt_list_pos_type pos, const adt_list_value
 }
 
 void
-adt_list_erase(adt_list list, const adt_list_pos_type pos)
+adt_list_erase(adt_list* list, const adt_list_pos_type pos)
 {
     adt_list_pointer posnode = list->front_;
 
