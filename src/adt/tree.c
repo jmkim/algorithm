@@ -42,14 +42,6 @@ adt_tree_postorder_traverse_for_destroy(adt_tree_pointer node)
     free(node);
 }
 
-adt_tree_boolean_type
-adt_tree_empty(adt_tree* tree)
-{ return (adt_tree_boolean_type)(tree->root_ == NULL); }
-
-adt_tree_size_type
-adt_tree_size(adt_tree* tree)
-{ return (adt_tree_size_type)tree->size_; }
-
 adt_tree_pair_type
 adt_tree_find(adt_tree* tree, const adt_tree_key_type key)
 {
@@ -248,27 +240,6 @@ adt_tree_traverse_levelorder(adt_tree* tree, void (* do_something)(adt_tree_pair
             if(node->right_ != NULL) adt_queue_push(queue_pair, node->right_->element_);
         }
     }
-}
-
-void
-adt_tree_traverse_inorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type))
-{
-    if(! adt_tree_empty(tree))
-        adt_tree_traverse_inorder_using_node(tree->root_, do_something);
-}
-
-void
-adt_tree_traverse_preorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type))
-{
-    if(! adt_tree_empty(tree))
-        adt_tree_traverse_preorder_using_node(tree->root_, do_something);
-}
-
-void
-adt_tree_traverse_postorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type))
-{
-    if(! adt_tree_empty(tree))
-        adt_tree_traverse_postorder_using_node(tree->root_, do_something);
 }
 
 void

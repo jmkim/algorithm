@@ -54,6 +54,13 @@ struct adt_tree_adt_tree
 
 typedef struct  adt_tree_adt_tree        adt_tree;
 
+#define adt_tree_empty(tree)    (adt_tree_boolean_type)(tree->root_ == NULL)
+#define adt_tree_size(tree)     tree->size_
+
+#define adt_tree_traverse_inorder(tree, callback)   adt_tree_traverse_inorder_using_node(tree->root_, callback)
+#define adt_tree_traverse_preorder(tree, callback)  adt_tree_traverse_preorder_using_node(tree->root_, callback)
+#define adt_tree_traverse_postorder(tree, callback) adt_tree_traverse_postorder_using_node(tree->root_, callback)
+
 adt_tree*
 adt_tree_create(const adt_tree_compare_func compare);
 
@@ -62,12 +69,6 @@ adt_tree_destroy(adt_tree* tree);
 
 void
 adt_tree_postorder_traverse_for_destroy(adt_tree_pointer node);
-
-adt_tree_boolean_type
-adt_tree_empty(adt_tree* tree);
-
-adt_tree_size_type
-adt_tree_size(adt_tree* tree);
 
 adt_tree_pair_type
 adt_tree_find(adt_tree* tree, const adt_tree_key_type key);
@@ -79,25 +80,7 @@ void
 adt_tree_erase(adt_tree* tree, const adt_tree_key_type key);
 
 void
-adt_tree_element_swap(adt_tree_pointer first, adt_tree_pointer second);
-
-adt_tree_pointer
-adt_tree_node_successor(adt_tree* tree, const adt_tree_pointer node);
-
-adt_tree_pointer
-adt_tree_node_predecessor(adt_tree* tree, const adt_tree_pointer node);
-
-void
 adt_tree_traverse_levelorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type));
-
-void
-adt_tree_traverse_inorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type));
-
-void
-adt_tree_traverse_preorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type));
-
-void
-adt_tree_traverse_postorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type));
 
 void
 adt_tree_traverse_inorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type));
@@ -107,6 +90,15 @@ adt_tree_traverse_preorder_using_node(adt_tree_pointer node, void (* do_somethin
 
 void
 adt_tree_traverse_postorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type));
+
+void
+adt_tree_element_swap(adt_tree_pointer first, adt_tree_pointer second);
+
+adt_tree_pointer
+adt_tree_node_successor(adt_tree* tree, const adt_tree_pointer node);
+
+adt_tree_pointer
+adt_tree_node_predecessor(adt_tree* tree, const adt_tree_pointer node);
 
 #ifdef __cplusplus
 }
