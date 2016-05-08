@@ -43,7 +43,7 @@ typedef         adt_tree_node_type*   adt_tree_pointer;
 typedef const   adt_tree_node_type*   adt_tree_const_pointer;
 
 typedef         int                 adt_tree_compare_type;
-typedef         adt_tree_compare_type     (* adt_tree_compare_func)(adt_tree_value_type, adt_tree_value_type);
+typedef         adt_tree_compare_type     (* adt_tree_compare_func)(adt_tree_key_type, adt_tree_key_type);
 
 struct adt_tree_adt_tree
 {
