@@ -15,11 +15,24 @@ extern "C"
 {
 #endif
 
-#define ADT_TREE_KEY_TYPE       ADT_PAIR_KEY_TYPE
-#define ADT_TREE_VALUE_TYPE     ADT_PAIR_VALUE_TYPE
+#ifndef ADT_TREE_KEY_TYPE
+#define ADT_TREE_KEY_TYPE       void*
+#endif
+
+#ifndef ADT_TREE_VALUE_TYPE
+#define ADT_TREE_VALUE_TYPE     void*
+#endif
+
 typedef ADT_TREE_KEY_TYPE       adt_tree_key_type;
 typedef ADT_TREE_VALUE_TYPE     adt_tree_value_type;
-typedef adt_pair*               adt_tree_pair_type;
+
+struct adt_tree_pair
+{
+    adt_tree_key_type       first;
+    adt_tree_value_type     second;
+};
+
+typedef struct  adt_tree_pair   adt_tree_pair_type;
 
 typedef size_t                  adt_tree_size_type;
 typedef int                     adt_tree_boolean_type;
@@ -32,7 +45,7 @@ typedef int                     adt_tree_boolean_type;
 
 struct adt_tree_node
 {
-            adt_tree_pair_type        element_;
+            adt_tree_pair_type*       element_;
     struct  adt_tree_node*            left_;
     struct  adt_tree_node*            right_;
     struct  adt_tree_node*            parent_;
@@ -70,26 +83,26 @@ adt_tree_destroy(adt_tree* tree);
 void
 adt_tree_postorder_traverse_for_destroy(adt_tree_pointer node);
 
-adt_tree_pair_type
+adt_tree_pair_type*
 adt_tree_find(adt_tree* tree, const adt_tree_key_type key);
 
 void
-adt_tree_insert(adt_tree* tree, const adt_tree_pair_type pair);
+adt_tree_insert(adt_tree* tree, adt_tree_pair_type* pair);
 
 void
 adt_tree_erase(adt_tree* tree, const adt_tree_key_type key);
 
 void
-adt_tree_traverse_levelorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type));
+adt_tree_traverse_levelorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type*));
 
 void
-adt_tree_traverse_inorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type));
+adt_tree_traverse_inorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type*));
 
 void
-adt_tree_traverse_preorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type));
+adt_tree_traverse_preorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type*));
 
 void
-adt_tree_traverse_postorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type));
+adt_tree_traverse_postorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type*));
 
 void
 adt_tree_element_swap(adt_tree_pointer first, adt_tree_pointer second);

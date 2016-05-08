@@ -8,10 +8,9 @@
  */
 
 #include <stdlib.h>
-#include "pair.h"
 #include "tree.h"
 
-#define  ADT_QUEUE_VALUE_TYPE   adt_pair*
+#define  ADT_QUEUE_VALUE_TYPE   adt_tree_pair_type*
 #include "queue.h"
 
 adt_tree*
@@ -42,7 +41,7 @@ adt_tree_postorder_traverse_for_destroy(adt_tree_pointer node)
     free(node);
 }
 
-adt_tree_pair_type
+adt_tree_pair_type*
 adt_tree_find(adt_tree* tree, const adt_tree_key_type key)
 {
     if(! adt_tree_empty(tree))
@@ -67,7 +66,7 @@ adt_tree_find(adt_tree* tree, const adt_tree_key_type key)
 }
 
 void
-adt_tree_insert(adt_tree* tree, const adt_tree_pair_type pair)
+adt_tree_insert(adt_tree* tree, adt_tree_pair_type* pair)
 {
     adt_tree_pointer node = (adt_tree_pointer)malloc(sizeof(adt_tree_node_type));
     node->element_ = pair;
@@ -222,13 +221,13 @@ adt_tree_node_successor(adt_tree* tree, const adt_tree_pointer node)
 void
 adt_tree_element_swap(adt_tree_pointer first, adt_tree_pointer second)
 {
-    adt_tree_pair_type temp = first->element_;
+    adt_tree_pair_type* temp = first->element_;
     first->element_ = second->element_;
     second->element_ = temp;
 }
 
 void
-adt_tree_traverse_levelorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type))
+adt_tree_traverse_levelorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type*))
 {
     if(! adt_tree_empty(tree))
     {
@@ -239,7 +238,7 @@ adt_tree_traverse_levelorder(adt_tree* tree, void (* do_something)(adt_tree_pair
 
         while(adt_queue_size(queue_pair) > 0)
         {
-            adt_tree_pair_type pair = (adt_tree_pair_type)adt_queue_front(queue_pair);
+            adt_tree_pair_type* pair = (adt_tree_pair_type*)adt_queue_front(queue_pair);
             adt_queue_pop(queue_pair);
 
             do_something(pair);
@@ -251,7 +250,7 @@ adt_tree_traverse_levelorder(adt_tree* tree, void (* do_something)(adt_tree_pair
 }
 
 void
-adt_tree_traverse_inorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type))
+adt_tree_traverse_inorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type*))
 {
     if(node == NULL) return;
 
@@ -261,7 +260,7 @@ adt_tree_traverse_inorder_using_node(adt_tree_pointer node, void (* do_something
 }
 
 void
-adt_tree_traverse_preorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type))
+adt_tree_traverse_preorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type*))
 {
     if(node == NULL) return;
 
@@ -271,7 +270,7 @@ adt_tree_traverse_preorder_using_node(adt_tree_pointer node, void (* do_somethin
 }
 
 void
-adt_tree_traverse_postorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type))
+adt_tree_traverse_postorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type*))
 {
     if(node == NULL) return;
 
