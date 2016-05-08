@@ -48,12 +48,15 @@ adt_tree_find(adt_tree* tree, const adt_tree_key_type key)
     if(! adt_tree_empty(tree))
     {
         adt_tree_pointer n = tree->root_;
+        adt_tree_compare_type comp;
         while(n != NULL)
         {
-            if(tree->compare_(key, n->element_->first) == 0)
+            comp = tree->compare_(key, n->element_->first);
+
+            if(comp == 0)
                 return n->element_;
 
-            if(tree->compare_(key, n->element_->first) < 0)
+            if(comp < 0)
                 n = n->left_;
             else
                 n = n->right_;
@@ -79,7 +82,7 @@ adt_tree_insert(adt_tree* tree, const adt_tree_pair_type pair)
     {
         adt_tree_pointer n = tree->root_;
         adt_tree_pointer p = NULL;
-        while(n != NULL)
+        do
         {
             p = n;
 
@@ -88,6 +91,7 @@ adt_tree_insert(adt_tree* tree, const adt_tree_pair_type pair)
             else
                 n = n->right_;
         }
+        while(n != NULL);
 
         node->parent_ = p;
         if(tree->compare_(pair->first, p->element_->first) < 0)
@@ -105,15 +109,18 @@ adt_tree_erase(adt_tree* tree, const adt_tree_key_type key)
     if(! adt_tree_empty(tree))
     {
         adt_tree_pointer n = tree->root_;
+        adt_tree_compare_type comp;
         while(n != NULL)
         {
-            if(tree->compare_(key, n->element_->first) == 0)
+            comp = tree->compare_(key, n->element_->first);
+            if(comp == 0)
             {
-                if(n->left_ != NULL && n->right_ != NULL)
+                if(n->left_ != NULL && n->right_ != NULL) /* Node n has two children */
                 {
-                    adt_tree_pointer p = adt_tree_node_successor(tree, n);
-                    adt_tree_element_swap(n, p);
-                    n = p;
+                    /* Remove one child */
+                    adt_tree_pointer p = adt_tree_node_successor(tree, n); /* Successor has only one child */
+                    adt_tree_element_swap(n, p); /* So swap with successor */
+                    n = p; /* Now node has one child */
                 }
 
                 if(n->left_ != NULL)
@@ -125,8 +132,10 @@ adt_tree_erase(adt_tree* tree, const adt_tree_key_type key)
                     else
                         n->parent_->right_ = n->left_;
                 }
-                else if(n->right_ != NULL)
-                {
+                else
+                {   /*  Case one: node n has a right child  -- n->right_ is right child node
+                        Case two: node n not have any child -- n->right_ is NULL */
+
                     if(n == tree->root_)
                         tree->root_ = n->right_;
                     else if(n->parent_->left_ == n)
@@ -134,14 +143,13 @@ adt_tree_erase(adt_tree* tree, const adt_tree_key_type key)
                     else
                         n->parent_->right_ = n->right_;
                 }
-                else if(n == tree->root_)
-                    tree->root_ = NULL;
-
                 --tree->size_;
+
                 free(n);
+                break;
             }
 
-            if(tree->compare_(key, n->element_->first) < 0)
+            if(comp < 0)
                 n = n->left_;
             else
                 n = n->right_;
