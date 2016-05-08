@@ -40,9 +40,9 @@ adt_list_clear(adt_list* list)
         n = p;
     }
 
-    list->size_ = 0;
-    list->front_ = NULL;
-    list->back_ = NULL;
+    list->size_     = 0;
+    list->front_    = NULL;
+    list->back_     = NULL;
 }
 
 void
@@ -55,7 +55,7 @@ adt_list_insert(adt_list* list, const adt_list_pos_type pos, const adt_list_valu
         posnode = posnode->prev_; /* Throw segfault if pos is greater than the size of list */
 
     adt_list_pointer newnode = (adt_list_pointer)malloc(sizeof(adt_list_node_type));
-    newnode->element_ = element;
+    newnode->element_   = element;
 
     if(adt_list_empty(list))
     {

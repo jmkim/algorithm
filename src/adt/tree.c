@@ -16,10 +16,10 @@
 adt_tree*
 adt_tree_create(const adt_tree_compare_func compare)
 {
-    adt_tree* tree = (adt_tree*)malloc(sizeof(struct adt_tree_adt_tree));
-    tree->size_ = 0;
-    tree->root_ = NULL;
-    tree->compare_ = compare;
+    adt_tree* tree  = (adt_tree*)malloc(sizeof(struct adt_tree_adt_tree));
+    tree->size_     = 0;
+    tree->root_     = NULL;
+    tree->compare_  = compare;
 }
 
 void
@@ -41,38 +41,14 @@ adt_tree_postorder_traverse_for_destroy(adt_tree_pointer node)
     free(node);
 }
 
-adt_tree_pair_type*
-adt_tree_find(adt_tree* tree, const adt_tree_key_type key)
-{
-    if(! adt_tree_empty(tree))
-    {
-        adt_tree_pointer n = tree->root_;
-        adt_tree_compare_type comp;
-        while(n != NULL)
-        {
-            comp = tree->compare_(key, n->element_->first);
-
-            if(comp == 0)
-                return n->element_;
-
-            if(comp < 0)
-                n = n->left_;
-            else
-                n = n->right_;
-        }
-    }
-
-    return NULL;
-}
-
 void
 adt_tree_insert(adt_tree* tree, adt_tree_pair_type* pair)
 {
     adt_tree_pointer node = (adt_tree_pointer)malloc(sizeof(adt_tree_node_type));
-    node->element_ = pair;
-    node->left_ = NULL;
-    node->right_ = NULL;
-    node->parent_ = NULL;
+    node->element_  = pair;
+    node->left_     = NULL;
+    node->right_    = NULL;
+    node->parent_   = NULL;
 
 
     if(adt_tree_empty(tree))
@@ -94,7 +70,7 @@ adt_tree_insert(adt_tree* tree, adt_tree_pair_type* pair)
 
         node->parent_ = p;
         if(tree->compare_(pair->first, p->element_->first) < 0)
-            p->left_ = node;
+            p->left_  = node;
         else
             p->right_ = node;
     }
@@ -125,22 +101,22 @@ adt_tree_erase(adt_tree* tree, const adt_tree_key_type key)
                 if(n->left_ != NULL)
                 {
                     if(n == tree->root_)
-                        tree->root_ = n->left_;
+                        tree->root_         = n->left_;
                     else if(n->parent_->left_ == n)
-                        n->parent_->left_ = n->left_;
+                        n->parent_->left_   = n->left_;
                     else
-                        n->parent_->right_ = n->left_;
+                        n->parent_->right_  = n->left_;
                 }
                 else
                 {   /*  Case one: node n has a right child  -- n->right_ is right child node
                         Case two: node n not have any child -- n->right_ is NULL */
 
                     if(n == tree->root_)
-                        tree->root_ = n->right_;
+                        tree->root_         = n->right_;
                     else if(n->parent_->left_ == n)
-                        n->parent_->left_ = n->right_;
+                        n->parent_->left_   = n->right_;
                     else
-                        n->parent_->right_ = n->right_;
+                        n->parent_->right_  = n->right_;
                 }
                 --tree->size_;
 
@@ -173,74 +149,28 @@ adt_tree_inorder_traverse_for_count(adt_tree_pointer node, const adt_tree_key_ty
     return count;
 }
 
-adt_tree_pointer
-adt_tree_node_predecessor(adt_tree* tree, const adt_tree_pointer node)
+adt_tree_pair_type*
+adt_tree_find(adt_tree* tree, const adt_tree_key_type key)
 {
-    adt_tree_pointer n = node;
-
-    if(n != NULL)
+    if(! adt_tree_empty(tree))
     {
-        if(n->left_ != NULL)
+        adt_tree_pointer n = tree->root_;
+        adt_tree_compare_type comp;
+        while(n != NULL)
         {
-            n = n->left_;
-            while(n->right_ != NULL)
+            comp = tree->compare_(key, n->element_->first);
+
+            if(comp == 0)
+                return n->element_;
+
+            if(comp < 0)
+                n = n->left_;
+            else
                 n = n->right_;
         }
-        else
-        {
-            while(n->parent_ != NULL)
-            {
-                if(n == n->parent_->left_)
-                {
-                    n = n->parent_;
-                    break;
-                }
-
-                n = n->parent_;
-            }
-        }
     }
 
-    return n;
-}
-
-adt_tree_pointer
-adt_tree_node_successor(adt_tree* tree, const adt_tree_pointer node)
-{
-    adt_tree_pointer n = node;
-
-    if(n != NULL)
-    {
-        if(n->right_ != NULL)
-        {
-            n = n->right_;
-            while(n->left_ != NULL)
-                n = n->left_;
-        }
-        else
-        {
-            while(n->parent_ != NULL)
-            {
-                if(n == n->parent_->right_)
-                {
-                    n = n->parent_;
-                    break;
-                }
-
-                n = n->parent_;
-            }
-        }
-    }
-
-    return n;
-}
-
-void
-adt_tree_element_swap(adt_tree_pointer first, adt_tree_pointer second)
-{
-    adt_tree_pair_type* temp = first->element_;
-    first->element_ = second->element_;
-    second->element_ = temp;
+    return NULL;
 }
 
 void
@@ -294,4 +224,74 @@ adt_tree_traverse_postorder_using_node(adt_tree_pointer node, void (* do_somethi
     adt_tree_traverse_preorder_using_node(node->left_, do_something);
     adt_tree_traverse_preorder_using_node(node->right_, do_something);
     do_something(node->element_);
+}
+
+void
+adt_tree_element_swap(adt_tree_pointer first, adt_tree_pointer second)
+{
+    adt_tree_pair_type* temp = first->element_;
+    first->element_ = second->element_;
+    second->element_ = temp;
+}
+
+adt_tree_pointer
+adt_tree_node_successor(adt_tree* tree, const adt_tree_pointer node)
+{
+    adt_tree_pointer n = node;
+
+    if(n != NULL)
+    {
+        if(n->right_ != NULL)
+        {
+            n = n->right_;
+            while(n->left_ != NULL)
+                n = n->left_;
+        }
+        else
+        {
+            while(n->parent_ != NULL)
+            {
+                if(n == n->parent_->right_)
+                {
+                    n = n->parent_;
+                    break;
+                }
+
+                n = n->parent_;
+            }
+        }
+    }
+
+    return n;
+}
+
+adt_tree_pointer
+adt_tree_node_predecessor(adt_tree* tree, const adt_tree_pointer node)
+{
+    adt_tree_pointer n = node;
+
+    if(n != NULL)
+    {
+        if(n->left_ != NULL)
+        {
+            n = n->left_;
+            while(n->right_ != NULL)
+                n = n->right_;
+        }
+        else
+        {
+            while(n->parent_ != NULL)
+            {
+                if(n == n->parent_->left_)
+                {
+                    n = n->parent_;
+                    break;
+                }
+
+                n = n->parent_;
+            }
+        }
+    }
+
+    return n;
 }
