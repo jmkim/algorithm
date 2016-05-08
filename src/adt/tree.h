@@ -70,6 +70,7 @@ typedef struct  adt_tree_adt_tree        adt_tree;
 #define adt_tree_empty(tree)    (adt_tree_boolean_type)(tree->root_ == NULL)
 #define adt_tree_size(tree)     tree->size_
 
+#define adt_tree_count(tree, key)                   adt_tree_inorder_traverse_for_count(tree->root_, key, tree->compare_)
 #define adt_tree_traverse_inorder(tree, callback)   adt_tree_traverse_inorder_using_node(tree->root_, callback)
 #define adt_tree_traverse_preorder(tree, callback)  adt_tree_traverse_preorder_using_node(tree->root_, callback)
 #define adt_tree_traverse_postorder(tree, callback) adt_tree_traverse_postorder_using_node(tree->root_, callback)
@@ -91,6 +92,9 @@ adt_tree_insert(adt_tree* tree, adt_tree_pair_type* pair);
 
 void
 adt_tree_erase(adt_tree* tree, const adt_tree_key_type key);
+
+adt_tree_size_type
+adt_tree_inorder_traverse_for_count(adt_tree_pointer node, const adt_tree_key_type key, const adt_tree_compare_func compare);
 
 void
 adt_tree_traverse_levelorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type*));

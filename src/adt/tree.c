@@ -156,6 +156,23 @@ adt_tree_erase(adt_tree* tree, const adt_tree_key_type key)
     }
 }
 
+adt_tree_size_type
+adt_tree_inorder_traverse_for_count(adt_tree_pointer node, const adt_tree_key_type key, const adt_tree_compare_func compare)
+{
+    if(node == NULL) return 0;
+
+    adt_tree_compare_type comp = compare(node->element_->first, key);
+    if(comp > 0) return 0;
+
+    adt_tree_size_type count = 0;
+
+    count += adt_tree_inorder_traverse_for_count(node->left_, key, compare);
+    if(comp == 0) count += 1;
+    count += adt_tree_inorder_traverse_for_count(node->right_, key, compare);
+
+    return count;
+}
+
 adt_tree_pointer
 adt_tree_node_predecessor(adt_tree* tree, const adt_tree_pointer node)
 {
