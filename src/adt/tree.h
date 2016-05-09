@@ -86,6 +86,9 @@ void
 adt_tree_postorder_traverse_for_destroy(adt_tree_pointer node);
 
 void
+adt_tree_clear(adt_tree* tree);
+
+void
 adt_tree_insert(adt_tree* tree, adt_tree_pair_type* pair);
 
 void

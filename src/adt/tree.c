@@ -25,9 +25,7 @@ adt_tree_create(const adt_tree_compare_func compare)
 void
 adt_tree_destroy(adt_tree* tree)
 {
-    if(! adt_tree_empty(tree))
-        adt_tree_postorder_traverse_for_destroy(tree->root_);
-
+    adt_tree_clear(tree);
     free(tree);
 }
 
@@ -39,6 +37,15 @@ adt_tree_postorder_traverse_for_destroy(adt_tree_pointer node)
     adt_tree_postorder_traverse_for_destroy(node->left_);
     adt_tree_postorder_traverse_for_destroy(node->right_);
     free(node);
+}
+
+void
+adt_tree_clear(adt_tree* tree)
+{
+    adt_tree_postorder_traverse_for_destroy(tree->root_);
+
+    tree->size_     = 0;
+    tree->root_     = NULL;
 }
 
 void
