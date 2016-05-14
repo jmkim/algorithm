@@ -15,11 +15,7 @@ extern "C"
 {
 #endif
 
-#ifndef ADT_LIST_VALUE_TYPE
-#define ADT_LIST_VALUE_TYPE     void*
-#endif
-
-typedef ADT_LIST_VALUE_TYPE     adt_list_value_type;
+typedef void*                   adt_list_value_type;
 
 typedef size_t                  adt_list_size_type;
 typedef int                     adt_list_boolean_type;
@@ -38,15 +34,25 @@ struct adt_list_node
 };
 
 typedef struct  adt_list_node           adt_list_node_type;
-typedef         adt_list_node_type*     adt_list_pointer;
-typedef const   adt_list_node_type*     adt_list_const_pointer;
+
 typedef int     adt_list_pos_type;
+
+typedef         void*                   adt_list_generic_ptr;
+typedef         adt_list_generic_ptr    (* adt_list_allocate_func)(adt_list_size_type);
+typedef         void                    (* adt_list_deallocate_func)(adt_list_generic_ptr);
+typedef         void                    (* adt_list_memcopy_func)(adt_list_generic_ptr, adt_list_generic_ptr, adt_list_size_type);
 
 struct adt_list_adt_list
 {
-    adt_list_size_type          size_;
-    adt_list_pointer            front_;
-    adt_list_pointer            back_;
+            adt_list_size_type          size_;
+            adt_list_node_type*         front_;
+            adt_list_node_type*         back_;
+
+    const   adt_list_size_type          value_size_;
+
+    const   adt_list_allocate_func      allocate_;
+    const   adt_list_deallocate_func    deallocate_;
+    const   adt_list_memcopy_func       memcopy_;
 };
 
 typedef struct  adt_list_adt_list       adt_list;
@@ -63,7 +69,7 @@ typedef struct  adt_list_adt_list       adt_list;
 #define adt_list_pop_back(list)                 adt_list_erase(list, list->size_ - 1)
 
 adt_list*
-adt_list_create(void);
+adt_list_create(const adt_list_size_type value_size);
 
 void
 adt_list_destroy(adt_list* list);

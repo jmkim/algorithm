@@ -15,21 +15,13 @@ extern "C"
 {
 #endif
 
-#ifndef ADT_TREE_KEY_TYPE
-#define ADT_TREE_KEY_TYPE       void*
-#endif
-
-#ifndef ADT_TREE_VALUE_TYPE
-#define ADT_TREE_VALUE_TYPE     void*
-#endif
-
-typedef ADT_TREE_KEY_TYPE       adt_tree_key_type;
-typedef ADT_TREE_VALUE_TYPE     adt_tree_value_type;
+typedef void*                   adt_tree_key_type;
+typedef void*                   adt_tree_value_type;
 
 struct adt_tree_pair
 {
-    adt_tree_key_type           first;
-    adt_tree_value_type         second;
+    const   adt_tree_key_type           first;
+            adt_tree_value_type         second;
 };
 
 typedef struct  adt_tree_pair   adt_tree_pair_type;
@@ -45,24 +37,34 @@ typedef int                     adt_tree_boolean_type;
 
 struct adt_tree_node
 {
-            adt_tree_pair_type*         element_;
+            adt_tree_pair_type          element_;
     struct  adt_tree_node*              left_;
     struct  adt_tree_node*              right_;
     struct  adt_tree_node*              parent_;
 };
 
 typedef struct  adt_tree_node           adt_tree_node_type;
-typedef         adt_tree_node_type*     adt_tree_pointer;
-typedef const   adt_tree_node_type*     adt_tree_const_pointer;
 
 typedef         int                     adt_tree_compare_type;
 typedef         adt_tree_compare_type   (* adt_tree_compare_func)(adt_tree_key_type, adt_tree_key_type);
 
+typedef         void*                   adt_tree_generic_ptr;
+typedef         adt_tree_generic_ptr    (* adt_tree_allocate_func)(adt_tree_size_type);
+typedef         void                    (* adt_tree_deallocate_func)(adt_tree_generic_ptr);
+typedef         adt_tree_generic_ptr    (* adt_tree_memcopy_func)(adt_tree_generic_ptr, const adt_tree_generic_ptr, adt_tree_size_type);
+
 struct adt_tree_adt_tree
 {
-    adt_tree_size_type          size_;
-    adt_tree_pointer            root_;
-    adt_tree_compare_func       compare_;
+            adt_tree_size_type          size_;
+            adt_tree_node_type*         root_;
+
+    const   adt_tree_size_type          key_size_;
+    const   adt_tree_size_type          value_size_;
+
+    const   adt_tree_compare_func       compare_;
+    const   adt_tree_allocate_func      allocate_;
+    const   adt_tree_deallocate_func    deallocate_;
+    const   adt_tree_memcopy_func       memcopy_;
 };
 
 typedef struct  adt_tree_adt_tree       adt_tree;
@@ -77,49 +79,52 @@ typedef struct  adt_tree_adt_tree       adt_tree;
 #define adt_tree_traverse_postorder(tree, callback)     adt_tree_traverse_postorder_using_node(tree->root_, callback)
 
 adt_tree*
-adt_tree_create(const adt_tree_compare_func compare);
+adt_tree_create(const adt_tree_size_type key_size, const adt_tree_size_type value_size, const adt_tree_compare_func compare);
 
 void
 adt_tree_destroy(adt_tree* tree);
 
 void
-adt_tree_postorder_traverse_for_destroy(adt_tree_pointer node);
-
-void
 adt_tree_clear(adt_tree* tree);
 
 void
-adt_tree_insert(adt_tree* tree, adt_tree_pair_type* pair);
+adt_tree_postorder_traverse_for_clear(adt_tree_node_type* node, const adt_tree_deallocate_func deallocate);
+
+void
+adt_tree_insert(adt_tree* tree, const adt_tree_pair_type pair);
 
 void
 adt_tree_erase(adt_tree* tree, const adt_tree_key_type key);
 
 adt_tree_size_type
-adt_tree_inorder_traverse_for_count(adt_tree_pointer node, const adt_tree_key_type key, const adt_tree_compare_func compare);
+adt_tree_inorder_traverse_for_count(const adt_tree_node_type* node, const adt_tree_key_type key, const adt_tree_compare_func compare);
 
 adt_tree_pair_type*
 adt_tree_find(adt_tree* tree, const adt_tree_key_type key);
 
 void
-adt_tree_traverse_levelorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type*));
+adt_tree_traverse_levelorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type));
 
 void
-adt_tree_traverse_inorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type*));
+adt_tree_traverse_inorder_using_node(adt_tree_node_type* node, void (* do_something)(adt_tree_pair_type));
 
 void
-adt_tree_traverse_preorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type*));
+adt_tree_traverse_preorder_using_node(adt_tree_node_type* node, void (* do_something)(adt_tree_pair_type));
 
 void
-adt_tree_traverse_postorder_using_node(adt_tree_pointer node, void (* do_something)(adt_tree_pair_type*));
+adt_tree_traverse_postorder_using_node(adt_tree_node_type* node, void (* do_something)(adt_tree_pair_type));
 
 void
-adt_tree_element_swap(adt_tree_pointer first, adt_tree_pointer second);
+adt_tree_element_swap(adt_tree_node_type* first, adt_tree_node_type* second, const adt_tree_memcopy_func memcopy);
 
-adt_tree_pointer
-adt_tree_node_successor(adt_tree* tree, const adt_tree_pointer node);
+adt_tree_node_type*
+adt_tree_node_successor(adt_tree* tree, adt_tree_node_type* node);
 
-adt_tree_pointer
-adt_tree_node_predecessor(adt_tree* tree, const adt_tree_pointer node);
+adt_tree_node_type*
+adt_tree_node_predecessor(adt_tree* tree, adt_tree_node_type* node);
+
+adt_tree_pair_type
+adt_tree_make_pair(const adt_tree_key_type first, const adt_tree_value_type second);
 
 #ifdef __cplusplus
 }

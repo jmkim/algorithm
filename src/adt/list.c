@@ -8,15 +8,27 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 #include "list.h"
 
 adt_list*
-adt_list_create(void)
+adt_list_create(const adt_list_size_type value_size)
 {
-    adt_list* list  = (adt_list*)malloc(sizeof(struct adt_list_adt_list));
-    list->size_     = 0;
-    list->front_    = NULL;
-    list->back_     = NULL;
+    adt_list temp =
+    {
+        .size_          = 0,
+        .front_         = NULL,
+        .back_          = NULL,
+
+        .value_size_    = value_size,
+
+        .allocate_      = malloc,   /**< in stdlib.h */
+        .deallocate_    = free,     /**< in stdlib.h */
+        .memcopy_       = (adt_list_memcopy_func)memcpy /**< in string.h */
+    };
+
+    adt_list* list  = (adt_list*)temp.allocate_(sizeof(struct adt_list_adt_list));
+    temp.memcopy_(list, &temp, sizeof(struct adt_list_adt_list));
 
     return list;
 }
@@ -25,18 +37,22 @@ void
 adt_list_destroy(adt_list* list)
 {
     adt_list_clear(list);
-    free(list);
+    list->deallocate_(list);
 }
 
 void
 adt_list_clear(adt_list* list)
 {
-    adt_list_pointer n = list->back_;
-    adt_list_pointer p = NULL;
+    adt_list_node_type* n = list->back_;
+    adt_list_node_type* p = NULL;
+
     while(n != NULL)
     {
         p = n->next_;
-        free(n);
+
+        list->deallocate_(n->element_);
+        list->deallocate_(n);
+
         n = p;
     }
 
@@ -48,14 +64,20 @@ adt_list_clear(adt_list* list)
 void
 adt_list_insert(adt_list* list, const adt_list_pos_type pos, const adt_list_value_type element)
 {
-    adt_list_pointer posnode = list->front_;
+    adt_list_node_type* posnode = list->front_;
 
     adt_list_pos_type p;
     for(p = 0; p < pos; ++p)
         posnode = posnode->prev_; /* Throw segfault if pos is greater than the size of list */
 
-    adt_list_pointer newnode = (adt_list_pointer)malloc(sizeof(adt_list_node_type));
-    newnode->element_   = element;
+    adt_list_node_type* newnode = (adt_list_node_type*)list->allocate_(sizeof(adt_list_node_type));
+
+    {
+        /** Do deep copy of element */
+
+        newnode->element_ = (adt_list_value_type*)list->allocate_(list->value_size_);
+        list->memcopy_(newnode->element_, element, list->value_size_);
+    }
 
     if(adt_list_empty(list))
     {
@@ -94,7 +116,7 @@ adt_list_insert(adt_list* list, const adt_list_pos_type pos, const adt_list_valu
 void
 adt_list_erase(adt_list* list, const adt_list_pos_type pos)
 {
-    adt_list_pointer posnode = list->front_;
+    adt_list_node_type* posnode = list->front_;
 
     adt_list_pos_type p;
     for(p = 0; p < pos; ++p)
@@ -116,13 +138,14 @@ adt_list_erase(adt_list* list, const adt_list_pos_type pos)
         --list->size_;
     }
 
-    free(posnode);
+    list->deallocate_(posnode->element_);
+    list->deallocate_(posnode);
 }
 
 void
 adt_list_traverse(adt_list* list, void (* do_something)(adt_list_value_type))
 {
-    adt_list_pointer n = list->front_;
+    adt_list_node_type* n = list->front_;
     while(n != NULL)
     {
         do_something(n->element_);
@@ -133,7 +156,7 @@ adt_list_traverse(adt_list* list, void (* do_something)(adt_list_value_type))
 void
 adt_list_traverse_reverse(adt_list* list, void (* do_something)(adt_list_value_type))
 {
-    adt_list_pointer n = list->back_;
+    adt_list_node_type* n = list->back_;
     while(n != NULL)
     {
         do_something(n->element_);

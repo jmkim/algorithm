@@ -31,7 +31,7 @@ typedef int         adt_queue_boolean_type;
 #define adt_queue_push(queue, element)  adt_list_push_back(queue, element)
 #define adt_queue_pop(queue)            adt_list_pop_front(queue)
 
-#define adt_queue_create()              adt_list_create()
+#define adt_queue_create(element_size)  adt_list_create(element_size)
 #define adt_queue_destroy(queue)        adt_list_destroy(queue)
 
 #define adt_queue_traverse(queue, callback)             adt_list_traverse(queue, callback)
