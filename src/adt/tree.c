@@ -62,29 +62,32 @@ adt_tree_postorder_traverse_for_clear(adt_tree_node_type* node, const adt_tree_d
     adt_tree_postorder_traverse_for_clear(node->left_, deallocate);
     adt_tree_postorder_traverse_for_clear(node->right_, deallocate);
 
-    deallocate(node->element_.first);
-    deallocate(node->element_.second);
+    deallocate(node->element_->first);
+    deallocate(node->element_->second);
+    deallocate(node->element_);
     deallocate(node);
 }
 
+#include <stdio.h>
 void
 adt_tree_insert(adt_tree* tree, const adt_tree_pair_type pair)
 {
-    adt_tree_node_type* node = (adt_tree_node_type*)tree->allocate_(sizeof(adt_tree_node_type));
-
+    adt_tree_node_type* node
+                    = (adt_tree_node_type*)tree->allocate_(sizeof(adt_tree_node_type));
+    node->element_  = (adt_tree_pair_type*)tree->allocate_(sizeof(adt_tree_pair_type));
     {
         /** Do deep copy of element */
-        adt_tree_pair_type pair = 
+
+        adt_tree_pair_type temp =
         {
-            .first  = (adt_tree_key_type*)tree->allocate_(tree->key_size_),
-            .second = (adt_tree_value_type*)tree->allocate_(tree->value_size_)
+            .first  = (adt_tree_key_type)tree->allocate_(tree->key_size_),
+            .second = (adt_tree_value_type)tree->allocate_(tree->value_size_)
         };
+        tree->memcopy_(temp.first,      pair.first,     tree->key_size_);
+        tree->memcopy_(temp.second,     pair.second,    tree->value_size_);
 
-        tree->memcopy_(node->element_.first,    pair.first,     tree->key_size_);
-        tree->memcopy_(node->element_.second,   pair.second,    tree->value_size_);
-        tree->memcopy_(&node->element_,         &pair,          sizeof(adt_tree_pair_type));
+        tree->memcopy_(node->element_,  &temp,          sizeof(adt_tree_pair_type));
     }
-
     node->left_     = NULL;
     node->right_    = NULL;
     node->parent_   = NULL;
@@ -99,7 +102,7 @@ adt_tree_insert(adt_tree* tree, const adt_tree_pair_type pair)
         {
             p = n;
 
-            if(tree->compare_(node->element_.first, n->element_.first) < 0)
+            if(tree->compare_(node->element_->first, n->element_->first) < 0)
                 n = n->left_;
             else
                 n = n->right_;
@@ -107,7 +110,7 @@ adt_tree_insert(adt_tree* tree, const adt_tree_pair_type pair)
         while(n != NULL);
 
         node->parent_ = p;
-        if(tree->compare_(node->element_.first, p->element_.first) < 0)
+        if(tree->compare_(node->element_->first, p->element_->first) < 0)
             p->left_  = node;
         else
             p->right_ = node;
@@ -125,14 +128,14 @@ adt_tree_erase(adt_tree* tree, const adt_tree_key_type key)
         adt_tree_compare_type comp;
         while(n != NULL)
         {
-            comp = tree->compare_(key, n->element_.first);
+            comp = tree->compare_(key, n->element_->first);
             if(comp == 0)
             {
                 if(n->left_ != NULL && n->right_ != NULL) /* Node n has two children */
                 {
                     /* Remove one child */
                     adt_tree_node_type* p = adt_tree_node_successor(tree, n); /* Successor has only one child */
-                    adt_tree_element_swap(n, p, tree->memcopy_); /* So swap with successor */
+                    adt_tree_element_swap(n, p); /* So swap with successor */
                     n = p; /* Now node has one child */
                 }
 
@@ -158,8 +161,9 @@ adt_tree_erase(adt_tree* tree, const adt_tree_key_type key)
                 }
                 --tree->size_;
 
-                tree->deallocate_(n->element_.first);
-                tree->deallocate_(n->element_.second);
+                tree->deallocate_(n->element_->first);
+                tree->deallocate_(n->element_->second);
+                tree->deallocate_(n->element_);
                 tree->deallocate_(n);
                 break;
             }
@@ -177,7 +181,7 @@ adt_tree_inorder_traverse_for_count(const adt_tree_node_type* node, const adt_tr
 {
     if(node == NULL) return 0;
 
-    adt_tree_compare_type comp = compare(node->element_.first, key);
+    adt_tree_compare_type comp = compare(node->element_->first, key);
     if(comp > 0) return 0;
 
     adt_tree_size_type count = 0;
@@ -198,10 +202,10 @@ adt_tree_find(adt_tree* tree, const adt_tree_key_type key)
         adt_tree_compare_type comp;
         while(n != NULL)
         {
-            comp = tree->compare_(key, n->element_.first);
+            comp = tree->compare_(key, n->element_->first);
 
             if(comp == 0)
-                return &n->element_;
+                return n->element_;
 
             if(comp < 0)
                 n = n->left_;
@@ -214,30 +218,30 @@ adt_tree_find(adt_tree* tree, const adt_tree_key_type key)
 }
 
 void
-adt_tree_traverse_levelorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type))
+adt_tree_traverse_levelorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type*))
 {
     if(! adt_tree_empty(tree))
     {
         adt_tree_node_type* node = tree->root_;
 
         adt_queue* queue_pair = adt_queue_create(sizeof(adt_tree_pair_type));
-        adt_queue_push(queue_pair, &node->element_);
+        adt_queue_push(queue_pair, node->element_);
 
         while(adt_queue_size(queue_pair) > 0)
         {
-            adt_tree_pair_type pair = *(adt_tree_pair_type*)adt_queue_front(queue_pair);
+            adt_tree_pair_type* pair = (adt_tree_pair_type*)adt_queue_front(queue_pair);
             adt_queue_pop(queue_pair);
 
             do_something(pair);
 
-            if(node->left_ != NULL) adt_queue_push(queue_pair, &node->left_->element_);
-            if(node->right_ != NULL) adt_queue_push(queue_pair, &node->right_->element_);
+            if(node->left_ != NULL) adt_queue_push(queue_pair, node->left_->element_);
+            if(node->right_ != NULL) adt_queue_push(queue_pair, node->right_->element_);
         }
     }
 }
 
 void
-adt_tree_traverse_inorder_using_node(adt_tree_node_type* node, void (* do_something)(adt_tree_pair_type))
+adt_tree_traverse_inorder_using_node(adt_tree_node_type* node, void (* do_something)(adt_tree_pair_type*))
 {
     if(node == NULL) return;
 
@@ -247,7 +251,7 @@ adt_tree_traverse_inorder_using_node(adt_tree_node_type* node, void (* do_someth
 }
 
 void
-adt_tree_traverse_preorder_using_node(adt_tree_node_type* node, void (* do_something)(adt_tree_pair_type))
+adt_tree_traverse_preorder_using_node(adt_tree_node_type* node, void (* do_something)(adt_tree_pair_type*))
 {
     if(node == NULL) return;
 
@@ -257,7 +261,7 @@ adt_tree_traverse_preorder_using_node(adt_tree_node_type* node, void (* do_somet
 }
 
 void
-adt_tree_traverse_postorder_using_node(adt_tree_node_type* node, void (* do_something)(adt_tree_pair_type))
+adt_tree_traverse_postorder_using_node(adt_tree_node_type* node, void (* do_something)(adt_tree_pair_type*))
 {
     if(node == NULL) return;
 
@@ -267,11 +271,12 @@ adt_tree_traverse_postorder_using_node(adt_tree_node_type* node, void (* do_some
 }
 
 void
-adt_tree_element_swap(adt_tree_node_type* first, adt_tree_node_type* second, const adt_tree_memcopy_func memcopy)
+adt_tree_element_swap(adt_tree_node_type* first, adt_tree_node_type* second)
 {
-    adt_tree_pair_type temp = first->element_;
-    memcopy(&first->element_,   &second->element_,  sizeof(adt_tree_pair_type));
-    memcopy(&second->element_,  &temp,              sizeof(adt_tree_pair_type));
+    adt_tree_pair_type* temp
+                        = first->element_;
+    first->element_     = second->element_;
+    second->element_    = temp;
 }
 
 adt_tree_node_type*

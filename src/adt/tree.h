@@ -20,8 +20,8 @@ typedef void*                   adt_tree_value_type;
 
 struct adt_tree_pair
 {
-    const   adt_tree_key_type           first;
-            adt_tree_value_type         second;
+    adt_tree_key_type           first; /** Should not modified */
+    adt_tree_value_type         second;
 };
 
 typedef struct  adt_tree_pair   adt_tree_pair_type;
@@ -37,7 +37,7 @@ typedef int                     adt_tree_boolean_type;
 
 struct adt_tree_node
 {
-            adt_tree_pair_type          element_;
+            adt_tree_pair_type*         element_;
     struct  adt_tree_node*              left_;
     struct  adt_tree_node*              right_;
     struct  adt_tree_node*              parent_;
@@ -103,19 +103,19 @@ adt_tree_pair_type*
 adt_tree_find(adt_tree* tree, const adt_tree_key_type key);
 
 void
-adt_tree_traverse_levelorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type));
+adt_tree_traverse_levelorder(adt_tree* tree, void (* do_something)(adt_tree_pair_type*));
 
 void
-adt_tree_traverse_inorder_using_node(adt_tree_node_type* node, void (* do_something)(adt_tree_pair_type));
+adt_tree_traverse_inorder_using_node(adt_tree_node_type* node, void (* do_something)(adt_tree_pair_type*));
 
 void
-adt_tree_traverse_preorder_using_node(adt_tree_node_type* node, void (* do_something)(adt_tree_pair_type));
+adt_tree_traverse_preorder_using_node(adt_tree_node_type* node, void (* do_something)(adt_tree_pair_type*));
 
 void
-adt_tree_traverse_postorder_using_node(adt_tree_node_type* node, void (* do_something)(adt_tree_pair_type));
+adt_tree_traverse_postorder_using_node(adt_tree_node_type* node, void (* do_something)(adt_tree_pair_type*));
 
 void
-adt_tree_element_swap(adt_tree_node_type* first, adt_tree_node_type* second, const adt_tree_memcopy_func memcopy);
+adt_tree_element_swap(adt_tree_node_type* first, adt_tree_node_type* second);
 
 adt_tree_node_type*
 adt_tree_node_successor(adt_tree* tree, adt_tree_node_type* node);
