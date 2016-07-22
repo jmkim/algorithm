@@ -3,6 +3,8 @@
  *  ADT: Stack
  *  Declaration
  *
+ *  Required: list.h
+ *
  *  http://github.com/kdzlvaids/algorithm
  *
  */
@@ -28,7 +30,7 @@ typedef int         adt_stack_boolean_type;
 #define adt_stack_push(stack, element)  adt_list_push_back(stack, element)
 #define adt_stack_pop(stack)            adt_list_pop_back(stack)
 
-#define adt_stack_create()              adt_list_create()
+#define adt_stack_create(element_size)  adt_list_create(element_size)
 #define adt_stack_destroy(stack)        adt_list_destroy(stack)
 
 #define adt_stack_traverse(stack, callback)             adt_list_traverse(stack, callback)
